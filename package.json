@@ -1,0 +1,19 @@
+{
+  "name": "coin-get-prices",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js",
+    "setup": "node ./createMarketArray.js"
+  },
+  "author": "Carlo Cruz",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^1.29.0",
+    "lodash": "^4.17.10",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
