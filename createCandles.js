@@ -9,14 +9,34 @@ const marketData = JSON.parse(
 	fs.readFileSync(absPath + '/logs/BTC-ADT-201855045.json')
 );
 
+const readLogs = coinPair => {
+	return fs
+		.readdirSync(absPath + '/logs')
+		.filter(file => {
+			if (file.indexOf(coinPair) >= 0) {
+				return true;
+			}
+
+			return false;
+		})
+		.reduce((acc, curr) => {
+			const logOutput = JSON.parse(
+				fs.readFileSync(absPath + '/logs/' + curr)
+			);
+
+			acc = [...acc, ...logOutput];
+
+			return acc;
+		}, []);
+};
+
 const createCandles = dataToParse => {
-	dataToParse.reduce((acc, price) => {
+	const output = dataToParse.reduce((acc, price) => {
 		const theDate = new Date(price.TimeStamp);
 		const startHour = startOfHour(theDate);
-        const timestamp = getTime(startHour);
-        console.log(startHour, timestamp);
+		const timestamp = getTime(startHour);
 
-		if (!safeGet(acc, startHour, false)) {
+		if (!acc[timestamp]) {
 			// OHLCV
 			acc[timestamp] = [
 				timestamp,
@@ -50,6 +70,9 @@ const createCandles = dataToParse => {
 
 		return acc;
 	}, {});
+
+	console.log(output);
 };
 
-createCandles(marketData);
+const priceData = readLogs('BTC-ADT');
+createCandles(priceData);
